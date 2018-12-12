@@ -57,7 +57,7 @@ export default class extends React.Component {
     }
     if(localStorage.getItem('status')){
       if(localStorage.getItem('id') && localStorage.getItem('status') == 'generate_product'){
-        fetch('http://localhost:1337/data?id='+localStorage.getItem('id'), {mode: 'cors'})
+        fetch('https://chpok.ml/data?id='+localStorage.getItem('id'), {mode: 'cors'})
         .then(response => response.text())
         .then((body) => {
           console.log(body);
@@ -103,7 +103,7 @@ export default class extends React.Component {
         belki = this.belki.current.state.currentInputValue,
         kalorii = this.kalorii.current.state.currentInputValue;
     // console.log(jir);
-    fetch('http://localhost:1337/insert?jir='+jir+'&uglevod='+uglevod+'&belki='+belki+'&kalorii='+kalorii, {mode: 'cors'})
+    fetch('https://chpok.ml/insert?jir='+jir+'&uglevod='+uglevod+'&belki='+belki+'&kalorii='+kalorii, {mode: 'cors'})
     .then(response => response.text())
     .then((body) => {
       console.log(body);
@@ -119,7 +119,7 @@ export default class extends React.Component {
         belki = this.belki_change.current.state.currentInputValue,
         kalorii = this.kalorii_change.current.state.currentInputValue;
     // console.log(jir);
-    fetch('http://localhost:1337/change_data?jir='+jir+'&uglevod='+uglevod+'&belki='+belki+'&kalorii='+kalorii+'&id='+localStorage.getItem('id')+"&blocked_products="+localStorage.getItem('blocked_products'), {mode: 'cors'})
+    fetch('https://chpok.ml/change_data?jir='+jir+'&uglevod='+uglevod+'&belki='+belki+'&kalorii='+kalorii+'&id='+localStorage.getItem('id')+"&blocked_products="+localStorage.getItem('blocked_products'), {mode: 'cors'})
     .then(response => response.text())
     .then((body) => {
       console.log(body);
@@ -149,7 +149,7 @@ export default class extends React.Component {
           var arr = [products[i].food_name]
           localStorage.setItem('blocked_products', arr)
         }
-        fetch('http://localhost:1337/change_product?kalorii='+cals+'&name='+name+"&id="+localStorage.getItem('id')+"&blocked_products="+localStorage.getItem('blocked_products'), {mode: 'cors'})
+        fetch('https://chpok.ml/change_product?kalorii='+cals+'&name='+name+"&id="+localStorage.getItem('id')+"&blocked_products="+localStorage.getItem('blocked_products'), {mode: 'cors'})
         .then(response => response.text())
         .then((body) => {
           products.splice(index, 1, JSON.parse(body))
