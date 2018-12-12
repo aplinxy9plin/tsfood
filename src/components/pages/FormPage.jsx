@@ -49,7 +49,7 @@ export default class extends React.Component {
     }
     if(localStorage.getItem('status')){
       if(localStorage.getItem('id') && localStorage.getItem('status') == 'generate_product'){
-        fetch('http://chpok.ml/data?id='+localStorage.getItem('id'), {mode: 'cors'})
+        fetch('https://chpok.ml/data?id='+localStorage.getItem('id'), {mode: 'cors'})
         .then(response => response.text())
         .then((body) => {
           console.log(body);
@@ -95,7 +95,7 @@ export default class extends React.Component {
         belki = this.belki.current.state.currentInputValue,
         kalorii = this.kalorii.current.state.currentInputValue;
     // console.log(jir);
-    fetch('http://chpok.ml/insert?jir='+jir+'&uglevod='+uglevod+'&belki='+belki+'&kalorii='+kalorii, {mode: 'cors'})
+    fetch('https://chpok.ml/insert?jir='+jir+'&uglevod='+uglevod+'&belki='+belki+'&kalorii='+kalorii, {mode: 'cors'})
     .then(response => response.text())
     .then((body) => {
       console.log(body);
@@ -115,7 +115,7 @@ export default class extends React.Component {
       if(products[i].food_name == this.asd[index].props.title){
         var cals = products[i].Calories,
             name = products[i].food_name
-        fetch('http://chpok.ml/change_product?kalorii='+cals+'&name='+name, {mode: 'cors'})
+        fetch('https://chpok.ml/change_product?kalorii='+cals+'&name='+name, {mode: 'cors'})
         .then(response => response.text())
         .then((body) => {
           products.splice(index, 1, JSON.parse(body))
