@@ -96,6 +96,23 @@ export default class extends React.Component {
     // // highlight-next-line
     // render(element, document.getElementById('my_div'));
   }
+  // NEW ENTERDATA
+  // enterData(){
+  //   var jir = this.jir.current.state.currentInputValue,
+  //       uglevod = this.uglevod.current.state.currentInputValue,
+  //       belki = this.belki.current.state.currentInputValue,
+  //       kalorii = this.kalorii.current.state.currentInputValue;
+  //   // console.log(jir);
+  //   fetch('https://chpok.ml/insert?jir='+jir+'&uglevod='+uglevod+'&belki='+belki+'&kalorii='+kalorii, {mode: 'cors'})
+  //   .then(response => response.text())
+  //   .then((body) => {
+  //     console.log(body);
+  //     var result = JSON.parse(body)
+  //     localStorage.setItem('id', result._id)
+  //     localStorage.setItem('status', 'generate_product');
+  //     window.location.reload();
+  //   });
+  // }
 
   enterData(){
     var jir = this.jir.current.state.currentInputValue,
@@ -107,8 +124,7 @@ export default class extends React.Component {
     .then(response => response.text())
     .then((body) => {
       console.log(body);
-      var result = JSON.parse(body)
-      localStorage.setItem('id', result._id)
+      localStorage.setItem('id', JSON.parse(body))
       localStorage.setItem('status', 'generate_product');
       window.location.reload();
     });
