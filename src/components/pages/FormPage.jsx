@@ -26,6 +26,9 @@ const numbers = [1, 2, 3, 4, 5];
 const listItems = numbers.map((number) =>
   <li>{number}</li>
 );
+// const tabStyle = {
+//   paddingTop: "0px"
+// };
 var items;
 export default class extends React.Component {
   constructor(props) {
@@ -36,7 +39,12 @@ export default class extends React.Component {
     this.uglevod = React.createRef();
     this.belki = React.createRef();
     this.kalorii = React.createRef();
+    this.jir_change = React.createRef();
+    this.uglevod_change = React.createRef();
+    this.belki_change = React.createRef();
+    this.kalorii_change = React.createRef();
     this.enterData = this.enterData.bind(this);
+    this.changeData = this.changeData.bind(this);
     this.asd = [];
     if(localStorage.getItem('id') == undefined){
       this.state = {
@@ -49,7 +57,7 @@ export default class extends React.Component {
     }
     if(localStorage.getItem('status')){
       if(localStorage.getItem('id') && localStorage.getItem('status') == 'generate_product'){
-        fetch('https://chpok.ml/data?id='+localStorage.getItem('id'), {mode: 'cors'})
+        fetch('http://localhost:1337/data?id='+localStorage.getItem('id'), {mode: 'cors'})
         .then(response => response.text())
         .then((body) => {
           console.log(body);
@@ -95,11 +103,28 @@ export default class extends React.Component {
         belki = this.belki.current.state.currentInputValue,
         kalorii = this.kalorii.current.state.currentInputValue;
     // console.log(jir);
-    fetch('https://chpok.ml/insert?jir='+jir+'&uglevod='+uglevod+'&belki='+belki+'&kalorii='+kalorii, {mode: 'cors'})
+    fetch('http://localhost:1337/insert?jir='+jir+'&uglevod='+uglevod+'&belki='+belki+'&kalorii='+kalorii, {mode: 'cors'})
     .then(response => response.text())
     .then((body) => {
       console.log(body);
-      localStorage.setItem('id', JSON.parse(body))
+      var result = JSON.parse(body)
+      localStorage.setItem('id', result._id)
+      localStorage.setItem('status', 'generate_product');
+      window.location.reload();
+    });
+  }
+  changeData(){
+    var jir = this.jir_change.current.state.currentInputValue,
+        uglevod = this.uglevod_change.current.state.currentInputValue,
+        belki = this.belki_change.current.state.currentInputValue,
+        kalorii = this.kalorii_change.current.state.currentInputValue;
+    // console.log(jir);
+    fetch('http://localhost:1337/change_data?jir='+jir+'&uglevod='+uglevod+'&belki='+belki+'&kalorii='+kalorii+'&id='+localStorage.getItem('id')+"&blocked_products="+localStorage.getItem('blocked_products'), {mode: 'cors'})
+    .then(response => response.text())
+    .then((body) => {
+      console.log(body);
+      var result = JSON.parse(body)
+      console.log(result);
       localStorage.setItem('status', 'generate_product');
       window.location.reload();
     });
@@ -114,8 +139,17 @@ export default class extends React.Component {
     for (var i = 0; i < products.length; i++) {
       if(products[i].food_name == this.asd[index].props.title){
         var cals = products[i].Calories,
-            name = products[i].food_name
-        fetch('https://chpok.ml/change_product?kalorii='+cals+'&name='+name, {mode: 'cors'})
+            name = products[i].food_name;
+        var blocked_products = localStorage.getItem('blocked_products')
+        if(blocked_products){
+          var arr = blocked_products.split(',')
+          arr.push(products[i].food_name)
+          localStorage.setItem('blocked_products', arr)
+        }else{
+          var arr = [products[i].food_name]
+          localStorage.setItem('blocked_products', arr)
+        }
+        fetch('http://localhost:1337/change_product?kalorii='+cals+'&name='+name+"&id="+localStorage.getItem('id')+"&blocked_products="+localStorage.getItem('blocked_products'), {mode: 'cors'})
         .then(response => response.text())
         .then((body) => {
           products.splice(index, 1, JSON.parse(body))
@@ -139,7 +173,7 @@ export default class extends React.Component {
         </Toolbar>
 
         <Tabs>
-          <Tab id="tab-1" className="page-content" tabActive>
+          <Tab id="tab-1" className="page-content" tabActive style={{paddingTop: "0px"}}>
             <Block>
             <BlockTitle>Продукты</BlockTitle>
             <List mediaList>
@@ -223,7 +257,7 @@ export default class extends React.Component {
             <Button className="col" big fill raised style={{background: "rgb(255, 224, 51)", color: "black"}}><b>Заказать доставку</b></Button>
             </Block>
           </Tab>
-          <Tab id="tab-2" className="page-content">
+          <Tab id="tab-2" className="page-content" style={{paddingTop: "0px"}}>
             <Block>
               <p>Tab 2 content</p>
               ...
@@ -236,10 +270,43 @@ export default class extends React.Component {
               </div>
             </Block>
           </Tab>
-          <Tab id="tab-3" className="page-content">
+          <Tab id="tab-3" className="page-content" style={{paddingTop: "0px"}}>
             <Block>
-              <p>Tab 3 content</p>
-              ...
+              <List form formdata>
+                <ListItem>
+                  <Label>Жиры</Label>
+                  <Input ref={this.jir_change} type="number" placeholder="Жиры" />
+                </ListItem>
+                <ListItem>
+                  <Label>Углеводы</Label>
+                  <Input ref={this.uglevod_change} type="number" placeholder="Углеводы" />
+                </ListItem>
+                <ListItem>
+                  <Label>Белки</Label>
+                  <Input ref={this.belki_change} type="number" placeholder="Белки" />
+                </ListItem>
+                <ListItem>
+                  <Label>Сумма калорий</Label>
+                  <Input ref={this.kalorii_change} type="number" placeholder="Сумма калорий" />
+                </ListItem>
+                <ListItem>
+                  <Label>Деньги</Label>
+                  <Input type="number" placeholder="Сколько денег вы готовы потратить" />
+                </ListItem>
+              </List>
+            </Block>
+            <Block>
+              <Button popupOpen=".demo-popup" onClick={this.changeData} className="col" big fill raised color="green">Изменить данные</Button>
+            </Block>
+            <Block>
+              <List>
+                <ListItem
+                  link="/blocked-products/"
+                  title="Черный список"
+                >
+                  <img slot="media" src="img/signal.png" width="40" />
+                </ListItem>
+              </List>
             </Block>
           </Tab>
         </Tabs>

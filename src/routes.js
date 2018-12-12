@@ -6,6 +6,7 @@ import NotFoundPage from './components/pages/NotFoundPage';
 import PanelLeftPage from './components/pages/PanelLeftPage';
 import PanelRightPage from './components/pages/PanelRightPage';
 import ProductInfo from './components/pages/ProductInfo';
+import BlockedProducts from './components/pages/BlockedProducts';
 
 export default [
   {
@@ -31,6 +32,10 @@ export default [
   {
     path: '/product-info/',
     component: ProductInfo,
+  },
+  {
+    path: '/blocked-products/',
+    component: BlockedProducts,
   },
   {
     path: '/dynamic-route/blog/:blogId/post/:postId/',
