@@ -30,7 +30,7 @@ export default [
     component: FormPage,
   },
   {
-    path: '/product-info/',
+    path: '/product-info/:id',
     component: ProductInfo,
   },
   {

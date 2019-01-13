@@ -19,7 +19,13 @@ import {
   Tab,
   SwipeoutActions,
   SwipeoutButton,
-  Col
+  Col,
+  Progressbar,
+  Segmented,
+  Card,
+  CardFooter,
+  CardContent,
+  CardHeader
 } from 'framework7-react';
 
 const numbers = [1, 2, 3, 4, 5];
@@ -29,22 +35,25 @@ const listItems = numbers.map((number) =>
 // const tabStyle = {
 //   paddingTop: "0px"
 // };
-var items;
+var items, image_link, breakfast, lunch, evening, first_snack = '', second_snack = '';
 export default class extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { posts: [], text: '' };
+    this.state = { posts: [], text: '', type: 1 };
     // this.state = { hits: null };
     this.jir = React.createRef();
     this.uglevod = React.createRef();
     this.belki = React.createRef();
     this.kalorii = React.createRef();
+    this.type1 = React.createRef();
+    this.type2 = React.createRef();
     this.jir_change = React.createRef();
     this.uglevod_change = React.createRef();
     this.belki_change = React.createRef();
     this.kalorii_change = React.createRef();
     this.enterData = this.enterData.bind(this);
     this.changeData = this.changeData.bind(this);
+    this.changeRadio = this.changeRadio.bind(this);
     this.asd = [];
     if(localStorage.getItem('id') == undefined){
       this.state = {
@@ -57,7 +66,8 @@ export default class extends React.Component {
     }
     if(localStorage.getItem('status')){
       if(localStorage.getItem('id') && localStorage.getItem('status') == 'generate_product'){
-        fetch('https://chpok.ml/data?id='+localStorage.getItem('id'), {mode: 'cors'})
+        // test data!!!
+        fetch('http://localhost:1337/test_data?id='+localStorage.getItem('id'), {mode: 'cors'})
         .then(response => response.text())
         .then((body) => {
           console.log(body);
@@ -66,18 +76,125 @@ export default class extends React.Component {
           window.location.reload()
         });
       }
+      var tmp;
       if(localStorage.getItem('id') && localStorage.getItem('status') == 'work'){
         var products = JSON.parse(localStorage.getItem('products'))
+        // items_dairy = products.map((number, index) =>
+        //
+        // )
+        var arr = [],
+            sum = 0,
+            obj = products,
+            arr_num = [],
+            tmp = [];
+        for (var o = 0; o < obj.length; o++) {
+          sum += parseInt(obj[o].calories)
+          if(o == obj.length-1){
+            for (var j = 0; j < obj.length; j++) {
+              var z = parseInt(obj[j].calories)/sum*100
+              arr.push(z); tmp.push(z);
+              if(j == obj.length-1){
+                console.log(arr);
+                // 45 35 20
+                tmp = sortGreatest(tmp);
+                for (var i = 0; i < arr.length; i++) {
+                  for (var b = 0; b < arr.length; b++) {
+                    if(arr[i] == tmp[b]){
+                      switch (i) {
+                        case 0:
+                            breakfast = <List>
+                              <ListItem link={'/product-info/'+obj[b]._id}
+                              title={obj[b].name}></ListItem>
+                            </List>
+                          break;
+                        case 1:
+                          lunch = <List>
+                            <ListItem link={'/product-info/'+obj[b]._id}
+                            title={obj[b].name}></ListItem>
+                          </List>
+                          break;
+                        case 2:
+                          evening = <List>
+                            <ListItem link={'/product-info/'+obj[b]._id}
+                            title={obj[b].name}></ListItem>
+                          </List>
+                          break;
+                        case 3:
+                          first_snack = <Card>
+                            <CardHeader><b>Перекус</b></CardHeader>
+                            <CardContent>
+                              <List>
+                                <ListItem link={'/product-info/'+obj[b]._id}
+                                title={obj[b].name}></ListItem>
+                              </List>
+                            </CardContent>
+                            <CardFooter>
+                              <Col>
+                                <Button fill color="green">Употреблено 😎</Button>
+                              </Col>
+                              <Col>
+                                <Button fill color="red">Пропущено ☹️</Button>
+                              </Col>
+                            </CardFooter>
+                          </Card>
+                          break;
+                        case 4:
+                        second_snack = <Card>
+                            <CardHeader><b>Перекус</b></CardHeader>
+                            <CardContent>
+                              <List>
+                                <ListItem link={'/product-info/'+obj[b]._id}
+                                title={obj[b].name}></ListItem>
+                              </List>
+                            </CardContent>
+                            <CardFooter>
+                              <Col>
+                                <Button fill color="green">Употреблено 😎</Button>
+                              </Col>
+                              <Col>
+                                <Button fill color="red">Пропущено ☹️</Button>
+                              </Col>
+                            </CardFooter>
+                          </Card>
+                          break;
+                        default:
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+        function sortGreatest(arr) {
+          // manually sort array from largest to smallest:
+          // loop forwards through array:
+          for (let i = 0; i < arr.length; i++) {
+            // loop through the array, moving forwards:
+            // note in loop below we set `j = i` so we move on after finding greatest value:
+            for (let j = i; j < arr.length; j++) {
+              if (arr[i] < arr[j]) {
+                let temp = arr[i]; // store original value for swapping
+                arr[i] = arr[j]; // set original value position to greater value
+                arr[j] = temp; // set greater value position to original value
+              };
+            };
+          };
+          return arr;
+        };
         items = products.map((number, index) =>
+          // subtitle = number.category+" "number.calories+"Ккал";
           <ListItem
             swipeout
             onSwipeoutDeleted={this.onDeleted.bind(this)}
-            link="/product-info/"
-            title={number.food_name}
-            after="20 ₽"
-            subtitle={number.Calories}
-            text="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla sagittis tellus ut turpis condimentum, ut dignissim lacus tincidunt. Cras dolor metus, ultrices condimentum sodales sit amet, pharetra sodales eros. Phasellus vel felis tellus. Mauris rutrum ligula nec dapibus feugiat. In vel dui laoreet, commodo augue id, pulvinar lacus."
+            link={'/product-info/'+number._id}
+            title={number.name}
+            // after={number.category}
+            subtitle={(number.category+" - "+number.calories+"Ккал")}
+            text={number.recipe}
             ref={(ref) => this.asd[index] = ref}
+            routeProps={{my_test: "123"}}
+            query={{my_test:"qwerty"}}
           >
             <SwipeoutActions right>
               <SwipeoutButton color="red" onClick={this.onDeleted.bind(this, number, index)}>Заменить</SwipeoutButton>
@@ -103,7 +220,7 @@ export default class extends React.Component {
   //       belki = this.belki.current.state.currentInputValue,
   //       kalorii = this.kalorii.current.state.currentInputValue;
   //   // console.log(jir);
-  //   fetch('https://chpok.ml/insert?jir='+jir+'&uglevod='+uglevod+'&belki='+belki+'&kalorii='+kalorii, {mode: 'cors'})
+  //   fetch('http://localhost:1337/insert?jir='+jir+'&uglevod='+uglevod+'&belki='+belki+'&kalorii='+kalorii, {mode: 'cors'})
   //   .then(response => response.text())
   //   .then((body) => {
   //     console.log(body);
@@ -113,18 +230,30 @@ export default class extends React.Component {
   //     window.location.reload();
   //   });
   // }
-
+  changeRadio(){
+    if(this.state.type == 1){
+      this.setState({
+        type: 2
+      })
+    }else{
+      this.setState({
+        type: 1
+      })
+    }
+  }
   enterData(){
     var jir = this.jir.current.state.currentInputValue,
         uglevod = this.uglevod.current.state.currentInputValue,
         belki = this.belki.current.state.currentInputValue,
-        kalorii = this.kalorii.current.state.currentInputValue;
-    // console.log(jir);
-    fetch('https://chpok.ml/insert?jir='+jir+'&uglevod='+uglevod+'&belki='+belki+'&kalorii='+kalorii, {mode: 'cors'})
+        kalorii = this.kalorii.current.state.currentInputValue,
+        type = (this.state.type == 2 || this.state.type == undefined) ? 1 : 2;
+    fetch('http://localhost:1337/insert?type='+type+'&jir='+jir+'&uglevod='+uglevod+'&belki='+belki+'&kalorii='+kalorii, {mode: 'cors'})
     .then(response => response.text())
     .then((body) => {
       console.log(body);
-      localStorage.setItem('id', JSON.parse(body))
+      var json = JSON.parse(body)
+      localStorage.setItem('id', json._id)
+      localStorage.setItem('calories', json.kalorii)
       localStorage.setItem('status', 'generate_product');
       window.location.reload();
     });
@@ -135,7 +264,7 @@ export default class extends React.Component {
         belki = this.belki_change.current.state.currentInputValue,
         kalorii = this.kalorii_change.current.state.currentInputValue;
     // console.log(jir);
-    fetch('https://chpok.ml/change_data?jir='+jir+'&uglevod='+uglevod+'&belki='+belki+'&kalorii='+kalorii+'&id='+localStorage.getItem('id')+"&blocked_products="+localStorage.getItem('blocked_products'), {mode: 'cors'})
+    fetch('http://localhost:1337/change_data?jir='+jir+'&uglevod='+uglevod+'&belki='+belki+'&kalorii='+kalorii+'&id='+localStorage.getItem('id')+"&blocked_products="+localStorage.getItem('blocked_products'), {mode: 'cors'})
     .then(response => response.text())
     .then((body) => {
       console.log(body);
@@ -165,7 +294,7 @@ export default class extends React.Component {
           var arr = [products[i].food_name]
           localStorage.setItem('blocked_products', arr)
         }
-        fetch('https://chpok.ml/change_product?kalorii='+cals+'&name='+name+"&id="+localStorage.getItem('id')+"&blocked_products="+localStorage.getItem('blocked_products'), {mode: 'cors'})
+        fetch('http://localhost:1337/change_product?kalorii='+cals+'&name='+name+"&id="+localStorage.getItem('id')+"&blocked_products="+localStorage.getItem('blocked_products'), {mode: 'cors'})
         .then(response => response.text())
         .then((body) => {
           products.splice(index, 1, JSON.parse(body))
@@ -180,11 +309,11 @@ export default class extends React.Component {
    return (
      <Page>
 
-      <Navbar title="Корзина" />
+      <Navbar title="Чпок" />
 
         <Toolbar tabbar labels bottomMd={this.state.isBottom}>
           <Link tabLink="#tab-1" tabLinkActive text="Корзина" iconIos="f7:bag" iconMd="material:email"></Link>
-          <Link tabLink="#tab-2" text="Расписание" iconIos="f7:today_fill" iconMd="material:today"></Link>
+          <Link tabLink="#tab-2" text="Дневник" iconIos="f7:today_fill" iconMd="material:today"></Link>
           <Link tabLink="#tab-3" text="Настройки" iconIos="f7:bars" iconMd="material:file_upload"></Link>
         </Toolbar>
 
@@ -274,17 +403,63 @@ export default class extends React.Component {
             </Block>
           </Tab>
           <Tab id="tab-2" className="page-content" style={{paddingTop: "0px"}}>
-            <Block>
-              <p>Tab 2 content</p>
-              ...
-              <ul>
-                {listItems}
-                {items}
-              </ul>
-              <div id="my_div">
-
+              <div style={{margin: "15px"}}>
+                <p style={{textAlign:"left"}}>
+                Необходимо употребить
+                <span style={{float:"right"}}>1400</span>
+                </p>
+                <p style={{textAlign:"left"}}>
+                Употреблено
+                <span style={{float:"right"}}>100</span>
+                </p>
+                <div>
+                  <p><Progressbar progress={50} id="demo-inline-progressbar"></Progressbar></p>
+                </div>
               </div>
-            </Block>
+            <Card>
+              <CardHeader><b>Завтрак</b></CardHeader>
+              <CardContent>
+                {breakfast}
+              </CardContent>
+              <CardFooter>
+                <Col>
+                  <Button fill color="green">Употреблено 😎</Button>
+                </Col>
+                <Col>
+                  <Button fill color="red">Пропущено ☹️</Button>
+                </Col>
+              </CardFooter>
+            </Card>
+            {first_snack}
+            <Card>
+              <CardHeader><b>Обед</b></CardHeader>
+              <CardContent>
+                {lunch}
+              </CardContent>
+              <CardFooter>
+                <Col>
+                  <Button fill color="green">Употреблено 😎</Button>
+                </Col>
+                <Col>
+                  <Button fill color="red">Пропущено ☹️</Button>
+                </Col>
+              </CardFooter>
+            </Card>
+            {second_snack}
+            <Card>
+              <CardHeader><b>Ужин</b></CardHeader>
+              <CardContent>
+                {evening}
+              </CardContent>
+              <CardFooter>
+                <Col>
+                  <Button fill color="green">Употреблено 😎</Button>
+                </Col>
+                <Col>
+                  <Button fill color="red">Пропущено ☹️</Button>
+                </Col>
+              </CardFooter>
+            </Card>
           </Tab>
           <Tab id="tab-3" className="page-content" style={{paddingTop: "0px"}}>
             <Block>
@@ -355,6 +530,28 @@ export default class extends React.Component {
             <Label>Деньги</Label>
             <Input type="number" placeholder="Сколько денег вы готовы потратить" />
           </ListItem>
+        </List>
+        <BlockTitle>
+          Тип питания
+        </BlockTitle>
+        <List mediaList>
+        <ListItem
+          radio
+          value=""
+          onChange={this.changeRadio}
+          defaultChecked
+          name="demo-media-checkbox"
+          title="Стандарт"
+          text="Завтрак, обед, ужин"
+        ></ListItem>
+        <ListItem
+          radio
+          value=""
+          onChange={this.changeRadio}
+          name="demo-media-checkbox"
+          title="Стандарт Плюс"
+          text="Завтрак, обед, ужин + 2 перекуса"
+          ></ListItem>
         </List>
         <Block>
         <Button popupOpen=".demo-popup" onClick={this.enterData} className="col" big fill raised color="green">Создать меню</Button>
