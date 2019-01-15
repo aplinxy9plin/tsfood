@@ -1,5 +1,5 @@
 import React from 'react';
-import { Page, Navbar, Link, Block, BlockTitle, List, ListItem } from 'framework7-react';
+import { Page, Navbar, Link, Block, BlockTitle, List, ListItem, Chip } from 'framework7-react';
 import { YMaps, Map, Placemark } from 'react-yandex-maps';
 var en = require('./en.json');
 const YandexMap = () => (
@@ -54,6 +54,11 @@ export default class extends React.Component {
         if(arr[i].products){
           block = <Block strong>
             <h1>{arr[i].name}</h1>
+            <Chip text="Веганское" />
+          <Chip text="Острое" />
+          <Chip text="Вкусное" />
+          <Chip text="Топ 5" />
+          <Chip text="Свежее" />
             <h4>{arr[i].calories} {en.kcal}</h4>
             <p><b>{en.category}:</b> {arr[i].category}</p>
             <p><b>{en.recipe}:</b> <br/>{arr[i].recipe}</p>
@@ -65,6 +70,11 @@ export default class extends React.Component {
         }else{
           block = <Block strong>
             <h1>{arr[i].name}</h1>
+            <Chip text="Веганское" />
+          <Chip text="Острое" />
+          <Chip text="Вкусное" />
+          <Chip text="Топ 5" />
+          <Chip text="Свежее" />
             <h4>{arr[i].calories} {en.kcal}</h4>
             <p><b>{en.category}:</b> {arr[i].category}</p>
             <p><b>{en.recipe}:</b> <br/>{arr[i].recipe}</p>
