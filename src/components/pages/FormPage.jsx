@@ -198,7 +198,7 @@ export default class extends React.Component {
             onSwipeoutDeleted={this.onDeleted.bind(this)}
             link={'/product-info/'+number._id}
             title={number.name}
-            after="20$"
+            after={"$"+number.price}
             subtitle={(number.category+" - "+number.calories+en.kcal)}
             text={number.recipe}
             ref={(ref) => this.asd[index] = ref}
