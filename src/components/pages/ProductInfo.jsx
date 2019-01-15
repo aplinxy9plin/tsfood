@@ -1,7 +1,7 @@
 import React from 'react';
 import { Page, Navbar, Link, Block, BlockTitle, List, ListItem } from 'framework7-react';
 import { YMaps, Map, Placemark } from 'react-yandex-maps';
-
+var en = require('./en.json');
 const YandexMap = () => (
   <YMaps>
     <Map defaultState={{ center: [56.486112, 84.958607], zoom: 14 }} width={"100%"} height={"30%"}>
@@ -54,10 +54,10 @@ export default class extends React.Component {
         if(arr[i].products){
           block = <Block strong>
             <h1>{arr[i].name}</h1>
-            <h4>{arr[i].calories} ккал</h4>
-            <p><b>Категория:</b> {arr[i].category}</p>
-            <p><b>Рецепт:</b> <br/>{arr[i].recipe}</p>
-            <h1>Ингредиенты</h1>
+            <h4>{arr[i].calories} {en.kcal}</h4>
+            <p><b>{en.category}:</b> {arr[i].category}</p>
+            <p><b>{en.recipe}:</b> <br/>{arr[i].recipe}</p>
+            <h1>{en.ingredients}</h1>
             <List simple-list>
               {items}
             </List>
@@ -65,9 +65,9 @@ export default class extends React.Component {
         }else{
           block = <Block strong>
             <h1>{arr[i].name}</h1>
-            <h4>{arr[i].calories} ккал</h4>
-            <p><b>Категория:</b> {arr[i].category}</p>
-            <p><b>Рецепт:</b> <br/>{arr[i].recipe}</p>
+            <h4>{arr[i].calories} {en.kcal}</h4>
+            <p><b>{en.category}:</b> {arr[i].category}</p>
+            <p><b>{en.recipe}:</b> <br/>{arr[i].recipe}</p>
             <List simple-list>
               {items}
             </List>
@@ -82,9 +82,9 @@ export default class extends React.Component {
     <Page style={{backgroundColor: "#fff"}}>
         {/*<img src={image_link} width="100%" />/*/}
         <ProductImage src={this.state.image} />
-        <Navbar title="Продукт" backLink="Назад"></Navbar>
+        <Navbar title={en.product} backLink={en.back}></Navbar>
         {block}
-        <BlockTitle>Магазины рядом:</BlockTitle>
+        <BlockTitle>{en.shops_nearby}:</BlockTitle>
         <YandexMap />
         <br />
       </Page>

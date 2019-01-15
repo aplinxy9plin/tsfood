@@ -1,6 +1,7 @@
 import React from 'react';
 import { Page, Navbar, Link, Block, BlockTitle, List, ListItem,  SwipeoutActions, SwipeoutButton, } from 'framework7-react';
 var items;
+var en = require('./en.json')
 export default class extends React.Component {
   constructor(props) {
     super(props);
@@ -19,14 +20,14 @@ export default class extends React.Component {
         ref={(ref) => this.asd[index] = ref}
       >
         <SwipeoutActions right>
-          <SwipeoutButton color="red" onClick={this.onDeleted.bind(this, number, index)}>Заменить</SwipeoutButton>
+          <SwipeoutButton color="red" onClick={this.onDeleted.bind(this, number, index)}>{en.change}</SwipeoutButton>
         </SwipeoutActions>
         <img slot='media' src='https://pbs.twimg.com/profile_images/425274582581264384/X3QXBN8C.jpeg' width='80' />
       </ListItem>
     )
     if(items.length == 0){
       items.push(
-        <p>Пусто</p>
+        <p>{en.empty}</p>
       )
     }
     console.log(items);
@@ -59,8 +60,8 @@ export default class extends React.Component {
   render() {
    return (
       <Page>
-        <Navbar title="Черный список" backLink="Back"></Navbar>
-        <BlockTitle>Продукты</BlockTitle>
+        <Navbar title={en.black_list} backLink={en.back}></Navbar>
+        <BlockTitle>{en.products}</BlockTitle>
         <Block>
           <List mediaList>
             {items}

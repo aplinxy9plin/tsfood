@@ -27,7 +27,7 @@ import {
   CardContent,
   CardHeader
 } from 'framework7-react';
-
+var en = require('./en.json');
 const numbers = [1, 2, 3, 4, 5];
 const listItems = numbers.map((number) =>
   <li>{number}</li>
@@ -121,7 +121,7 @@ export default class extends React.Component {
                           break;
                         case 3:
                           first_snack = <Card>
-                            <CardHeader><b>Перекус</b></CardHeader>
+                            <CardHeader><b>{en.snacks}</b></CardHeader>
                             <CardContent>
                               <List>
                                 <ListItem link={'/product-info/'+obj[b]._id}
@@ -130,17 +130,17 @@ export default class extends React.Component {
                             </CardContent>
                             <CardFooter>
                               <Col>
-                                <Button fill color="green">Употреблено 😎</Button>
+                                <Button fill color="green">{en.consumed} 😎</Button>
                               </Col>
                               <Col>
-                                <Button fill color="red">Пропущено ☹️</Button>
+                                <Button fill color="red">{en.skipped} ☹️</Button>
                               </Col>
                             </CardFooter>
                           </Card>
                           break;
                         case 4:
                         second_snack = <Card>
-                            <CardHeader><b>Перекус</b></CardHeader>
+                            <CardHeader><b>{en.snacks}</b></CardHeader>
                             <CardContent>
                               <List>
                                 <ListItem link={'/product-info/'+obj[b]._id}
@@ -149,10 +149,10 @@ export default class extends React.Component {
                             </CardContent>
                             <CardFooter>
                               <Col>
-                                <Button fill color="green">Употреблено 😎</Button>
+                                <Button fill color="green">{en.consumed} 😎</Button>
                               </Col>
                               <Col>
-                                <Button fill color="red">Пропущено ☹️</Button>
+                                <Button fill color="red">{en.skipped} ☹️</Button>
                               </Col>
                             </CardFooter>
                           </Card>
@@ -190,14 +190,14 @@ export default class extends React.Component {
             link={'/product-info/'+number._id}
             title={number.name}
             // after={number.category}
-            subtitle={(number.category+" - "+number.calories+"Ккал")}
+            subtitle={(number.category+" - "+number.calories+en.kcal)}
             text={number.recipe}
             ref={(ref) => this.asd[index] = ref}
             routeProps={{my_test: "123"}}
             query={{my_test:"qwerty"}}
           >
             <SwipeoutActions right>
-              <SwipeoutButton color="red" onClick={this.onDeleted.bind(this, number, index)}>Заменить</SwipeoutButton>
+              <SwipeoutButton color="red" onClick={this.onDeleted.bind(this, number, index)}>{en.change}</SwipeoutButton>
             </SwipeoutActions>
             <img slot='media' src='https://pbs.twimg.com/profile_images/425274582581264384/X3QXBN8C.jpeg' width='80' />
           </ListItem>
@@ -309,18 +309,18 @@ export default class extends React.Component {
    return (
      <Page>
 
-      <Navbar title="Чпок" />
+      <Navbar title={en.app_name} />
 
         <Toolbar tabbar labels bottomMd={this.state.isBottom}>
-          <Link tabLink="#tab-1" tabLinkActive text="Корзина" iconIos="f7:bag" iconMd="material:email"></Link>
-          <Link tabLink="#tab-2" text="Дневник" iconIos="f7:today_fill" iconMd="material:today"></Link>
-          <Link tabLink="#tab-3" text="Настройки" iconIos="f7:bars" iconMd="material:file_upload"></Link>
+          <Link tabLink="#tab-1" tabLinkActive text={en.food_basket} iconIos="f7:bag" iconMd="material:email"></Link>
+          <Link tabLink="#tab-2" text={en.diary} iconIos="f7:today_fill" iconMd="material:today"></Link>
+          <Link tabLink="#tab-3" text={en.settings} iconIos="f7:bars" iconMd="material:file_upload"></Link>
         </Toolbar>
 
         <Tabs>
           <Tab id="tab-1" className="page-content" tabActive style={{paddingTop: "0px"}}>
             <Block>
-            <BlockTitle>Продукты</BlockTitle>
+            <BlockTitle>{en.products}</BlockTitle>
             <List mediaList>
             {items}
             {/*<ListItem
@@ -399,17 +399,17 @@ export default class extends React.Component {
               <img slot="media" src="http://chtoem.ru/wp-content/uploads/2015/12/salat.jpg" width="80" />
             </ListItem>*/}
             </List>
-            <Button className="col" big fill raised style={{background: "rgb(255, 224, 51)", color: "black"}}><b>Заказать доставку</b></Button>
+            <Button className="col" big fill raised style={{background: "rgb(255, 224, 51)", color: "black"}}><b>{en.delivery}</b></Button>
             </Block>
           </Tab>
           <Tab id="tab-2" className="page-content" style={{paddingTop: "0px"}}>
               <div style={{margin: "15px"}}>
                 <p style={{textAlign:"left"}}>
-                Необходимо употребить
+                {en.need_eat}
                 <span style={{float:"right"}}>1400</span>
                 </p>
                 <p style={{textAlign:"left"}}>
-                Употреблено
+                {en.consumed}
                 <span style={{float:"right"}}>100</span>
                 </p>
                 <div>
@@ -417,46 +417,46 @@ export default class extends React.Component {
                 </div>
               </div>
             <Card>
-              <CardHeader><b>Завтрак</b></CardHeader>
+              <CardHeader><b>{en.breakfast}</b></CardHeader>
               <CardContent>
                 {breakfast}
               </CardContent>
               <CardFooter>
                 <Col>
-                  <Button fill color="green">Употреблено 😎</Button>
+                  <Button fill color="green">{en.consumed} 😎</Button>
                 </Col>
                 <Col>
-                  <Button fill color="red">Пропущено ☹️</Button>
+                  <Button fill color="red">{en.skipped} ☹️</Button>
                 </Col>
               </CardFooter>
             </Card>
             {first_snack}
             <Card>
-              <CardHeader><b>Обед</b></CardHeader>
+              <CardHeader><b>{en.lunch}</b></CardHeader>
               <CardContent>
                 {lunch}
               </CardContent>
               <CardFooter>
                 <Col>
-                  <Button fill color="green">Употреблено 😎</Button>
+                  <Button fill color="green">{en.consumed} 😎</Button>
                 </Col>
                 <Col>
-                  <Button fill color="red">Пропущено ☹️</Button>
+                  <Button fill color="red">{en.skipped} ☹️</Button>
                 </Col>
               </CardFooter>
             </Card>
             {second_snack}
             <Card>
-              <CardHeader><b>Ужин</b></CardHeader>
+              <CardHeader><b>{en.dinner}</b></CardHeader>
               <CardContent>
                 {evening}
               </CardContent>
               <CardFooter>
                 <Col>
-                  <Button fill color="green">Употреблено 😎</Button>
+                  <Button fill color="green">{en.consumed} 😎</Button>
                 </Col>
                 <Col>
-                  <Button fill color="red">Пропущено ☹️</Button>
+                  <Button fill color="red">{en.skipped} ☹️</Button>
                 </Col>
               </CardFooter>
             </Card>
@@ -465,35 +465,35 @@ export default class extends React.Component {
             <Block>
               <List form formdata>
                 <ListItem>
-                  <Label>Жиры</Label>
-                  <Input ref={this.jir_change} type="number" placeholder="Жиры" />
+                  <Label>{en.fat}</Label>
+                  <Input ref={this.jir_change} type="number" placeholder={en.fat} />
                 </ListItem>
                 <ListItem>
-                  <Label>Углеводы</Label>
-                  <Input ref={this.uglevod_change} type="number" placeholder="Углеводы" />
+                  <Label>{en.carbohydrates}</Label>
+                  <Input ref={this.uglevod_change} type="number" placeholder={en.carbohydrates} />
                 </ListItem>
                 <ListItem>
-                  <Label>Белки</Label>
-                  <Input ref={this.belki_change} type="number" placeholder="Белки" />
+                  <Label>{en.proteins}</Label>
+                  <Input ref={this.belki_change} type="number" placeholder={en.proteins} />
                 </ListItem>
                 <ListItem>
-                  <Label>Сумма калорий</Label>
-                  <Input ref={this.kalorii_change} type="number" placeholder="Сумма калорий" />
+                  <Label>{en.calories}</Label>
+                  <Input ref={this.kalorii_change} type="number" placeholder={en.calories} />
                 </ListItem>
                 <ListItem>
-                  <Label>Деньги</Label>
-                  <Input type="number" placeholder="Сколько денег вы готовы потратить" />
+                  <Label>{en.money}</Label>
+                  <Input type="number" placeholder={en.money_send} />
                 </ListItem>
               </List>
             </Block>
             <Block>
-              <Button popupOpen=".demo-popup" onClick={this.changeData} className="col" big fill raised color="green">Изменить данные</Button>
+              <Button popupOpen=".demo-popup" onClick={this.changeData} className="col" big fill raised color="green">{en.change_data}</Button>
             </Block>
             <Block>
               <List>
                 <ListItem
                   link="/blocked-products/"
-                  title="Черный список"
+                  title={en.black_list}
                 >
                   <img slot="media" src="img/signal.png" width="40" />
                 </ListItem>
@@ -507,32 +507,32 @@ export default class extends React.Component {
 
         <Popup className="demo-popup" opened={this.state.popupOpened} onPopupClosed={() => this.setState({popupOpened : false})}>
         <Page>
-        <Navbar title="Ввод данных" />
-        <BlockTitle>Данные</BlockTitle>
+        <Navbar title={en.enter_data} />
+        <BlockTitle>{en.data}</BlockTitle>
         <List form formdata>
           <ListItem>
-            <Label>Жиры</Label>
-            <Input ref={this.jir} type="number" placeholder="Жиры" />
+            <Label>{en.fat}</Label>
+            <Input ref={this.jir} type="number" placeholder={en.fat} />
           </ListItem>
           <ListItem>
-            <Label>Углеводы</Label>
-            <Input ref={this.uglevod} type="number" placeholder="Углеводы" />
+            <Label>{en.carbohydrates}</Label>
+            <Input ref={this.uglevod} type="number" placeholder={en.carbohydrates} />
           </ListItem>
           <ListItem>
-            <Label>Белки</Label>
-            <Input ref={this.belki} type="number" placeholder="Белки" />
+            <Label>{en.proteins}</Label>
+            <Input ref={this.belki} type="number" placeholder={en.proteins} />
           </ListItem>
           <ListItem>
-            <Label>Сумма калорий</Label>
-            <Input ref={this.kalorii} type="number" placeholder="Сумма калорий" />
+            <Label>{en.calories}</Label>
+            <Input ref={this.kalorii} type="number" placeholder={en.calories} />
           </ListItem>
           <ListItem>
-            <Label>Деньги</Label>
-            <Input type="number" placeholder="Сколько денег вы готовы потратить" />
+            <Label>{en.money}</Label>
+            <Input type="number" placeholder={en.money_send} />
           </ListItem>
         </List>
         <BlockTitle>
-          Тип питания
+          {en.food_type}
         </BlockTitle>
         <List mediaList>
         <ListItem
@@ -541,20 +541,20 @@ export default class extends React.Component {
           onChange={this.changeRadio}
           defaultChecked
           name="demo-media-checkbox"
-          title="Стандарт"
-          text="Завтрак, обед, ужин"
+          title={en.standart}
+          text={en.standart_info}
         ></ListItem>
         <ListItem
           radio
           value=""
           onChange={this.changeRadio}
           name="demo-media-checkbox"
-          title="Стандарт Плюс"
-          text="Завтрак, обед, ужин + 2 перекуса"
+          title={en.standart_plus}
+          text={en.standart_plus_info}
           ></ListItem>
         </List>
         <Block>
-        <Button popupOpen=".demo-popup" onClick={this.enterData} className="col" big fill raised color="green">Создать меню</Button>
+        <Button popupOpen=".demo-popup" onClick={this.enterData} className="col" big fill raised color="green">{en.create_menu}</Button>
         </Block>
         </Page>
         </Popup>
