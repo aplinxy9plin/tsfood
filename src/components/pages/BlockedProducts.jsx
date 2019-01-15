@@ -42,7 +42,7 @@ export default class extends React.Component {
     //       var arr = [products[i].food_name]
     //       localStorage.setItem('blocked_products', arr)
     //     }
-    //     fetch('http://localhost:3000/change_product?kalorii='+cals+'&name='+name, {mode: 'cors'})
+    //     fetch('http://chpok.ml:3000/change_product?kalorii='+cals+'&name='+name, {mode: 'cors'})
     //     .then(response => response.text())
     //     .then((body) => {
     //       products.splice(index, 1, JSON.parse(body))

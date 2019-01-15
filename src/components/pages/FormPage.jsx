@@ -79,7 +79,7 @@ export default class extends React.Component {
     if(localStorage.getItem('status')){
       if(localStorage.getItem('id') && localStorage.getItem('status') == 'generate_product'){
         // test data!!!
-        fetch('http://localhost:3000/test_data?id='+localStorage.getItem('id'), {mode: 'cors'})
+        fetch('http://chpok.ml:3000/test_data?id='+localStorage.getItem('id'), {mode: 'cors'})
         .then(response => response.text())
         .then((body) => {
           console.log(body);
@@ -229,7 +229,7 @@ export default class extends React.Component {
   //       belki = this.belki.current.state.currentInputValue,
   //       kalorii = this.kalorii.current.state.currentInputValue;
   //   // console.log(jir);
-  //   fetch('http://localhost:3000/insert?jir='+jir+'&uglevod='+uglevod+'&belki='+belki+'&kalorii='+kalorii, {mode: 'cors'})
+  //   fetch('http://chpok.ml:3000/insert?jir='+jir+'&uglevod='+uglevod+'&belki='+belki+'&kalorii='+kalorii, {mode: 'cors'})
   //   .then(response => response.text())
   //   .then((body) => {
   //     console.log(body);
@@ -262,7 +262,7 @@ export default class extends React.Component {
         money = this.money.current.state.currentInputValue,
         type = (this.state.type == 2 || this.state.type == undefined) ? 1 : 2;
     if((jir !== '' && jir !== undefined) && uglevod !== '' && uglevod !== undefined && belki !== '' && belki !== undefined && kalorii !== '' && kalorii !== undefined && money !== '' && money !== undefined){
-      fetch('http://localhost:3000/insert?type='+type+'&jir='+jir+'&uglevod='+uglevod+'&belki='+belki+'&kalorii='+kalorii, {mode: 'cors'})
+      fetch('http://chpok.ml:3000/insert?type='+type+'&jir='+jir+'&uglevod='+uglevod+'&belki='+belki+'&kalorii='+kalorii, {mode: 'cors'})
       .then(response => response.text())
       .then((body) => {
         console.log(body);
@@ -294,7 +294,7 @@ export default class extends React.Component {
         kalorii = this.kalorii_change.current.state.currentInputValue;
     console.log(this);
     // console.log(jir);
-    // fetch('http://localhost:3000/change_data?jir='+jir+'&uglevod='+uglevod+'&belki='+belki+'&kalorii='+kalorii+'&id='+localStorage.getItem('id')+"&blocked_products="+localStorage.getItem('blocked_products'), {mode: 'cors'})
+    // fetch('http://chpok.ml:3000/change_data?jir='+jir+'&uglevod='+uglevod+'&belki='+belki+'&kalorii='+kalorii+'&id='+localStorage.getItem('id')+"&blocked_products="+localStorage.getItem('blocked_products'), {mode: 'cors'})
     // .then(response => response.text())
     // .then((body) => {
     //   console.log(body);
@@ -312,7 +312,7 @@ export default class extends React.Component {
 
   onDeleted(name){
     var blocked = localStorage.getItem('blocked_products') ? JSON.stringify(localStorage.getItem('blocked_products')) : ""
-    fetch('http://localhost:3000/change_dish?name='+name+"&blocked="+blocked, {mode: 'cors'})
+    fetch('http://chpok.ml:3000/change_dish?name='+name+"&blocked="+blocked, {mode: 'cors'})
     .then(response => response.text())
     .then((body) => {
       body = JSON.parse(body)
@@ -354,7 +354,7 @@ export default class extends React.Component {
   //   //       var arr = [products[i].food_name]
   //   //       localStorage.setItem('blocked_products', arr)
   //   //     }
-  //   //     fetch('http://localhost:3000/change_product?kalorii='+cals+'&name='+name+"&id="+localStorage.getItem('id')+"&blocked_products="+localStorage.getItem('blocked_products'), {mode: 'cors'})
+  //   //     fetch('http://chpok.ml:3000/change_product?kalorii='+cals+'&name='+name+"&id="+localStorage.getItem('id')+"&blocked_products="+localStorage.getItem('blocked_products'), {mode: 'cors'})
   //   //     .then(response => response.text())
   //   //     .then((body) => {
   //   //       products.splice(index, 1, JSON.parse(body))
