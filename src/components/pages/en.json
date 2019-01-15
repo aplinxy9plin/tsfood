@@ -39,5 +39,6 @@
   "empty": "Empty",
   "empty_fields": "One or more fields are not filled!",
   "error": "Error",
-  "close": "Close"
+  "close": "Close",
+  "change_lang": "Change language"
 }

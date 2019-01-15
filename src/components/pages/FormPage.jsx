@@ -30,7 +30,6 @@ import {
   Popover
 } from 'framework7-react';
 import {dialog} from 'framework7'
-var en = require('./en.json');
 const numbers = [1, 2, 3, 4, 5];
 const listItems = numbers.map((number) =>
   <li>{number}</li>
@@ -38,7 +37,14 @@ const listItems = numbers.map((number) =>
 // const tabStyle = {
 //   paddingTop: "0px"
 // };
-var items, image_link, breakfast, lunch, evening, first_snack = '', second_snack = '';
+var items, image_link, breakfast, lunch, evening, first_snack = '', second_snack = '', lang_img;
+if(localStorage.getItem('lang') == null || localStorage.getItem('lang') == 'en'){
+  var en = require('./en.json');
+  lang_img = "img/en.png"
+}else{
+  var en = require('./ru.json');
+  lang_img = "img/russia.png"
+}
 export default class extends React.Component {
   constructor(props) {
     super(props);
@@ -59,6 +65,7 @@ export default class extends React.Component {
     this.enterData = this.enterData.bind(this);
     this.changeData = this.changeData.bind(this);
     this.changeRadio = this.changeRadio.bind(this);
+    this.changeLang = this.changeLang.bind(this);
     this.asd = [];
     if(localStorage.getItem('id') == undefined){
       this.state = {
@@ -245,6 +252,10 @@ export default class extends React.Component {
         type: 1
       })
     }
+  }
+  changeLang(lang){
+    localStorage.setItem('lang', lang)
+    window.location.reload();
   }
   enterData(){
     var jir = this.jir.current.state.currentInputValue,
@@ -511,6 +522,9 @@ export default class extends React.Component {
               <Button popupOpen=".demo-popup" onClick={this.changeData} className="col" big fill raised color="green">{en.change_data}</Button>
             </Block>
             <Block>
+              <Button popoverOpen=".popover-menu" className="col" big>{en.change_lang}</Button>
+            </Block>
+            <Block>
               <List>
                 <ListItem
                   link="/blocked-products/"
@@ -531,7 +545,7 @@ export default class extends React.Component {
         <Navbar title={en.enter_data}>
           <NavRight>
             <Link icon="icon-bars" popoverOpen=".popover-menu">
-              <img src="img/en.png" width="40px" />
+              <img src={lang_img} width="40px" />
             </Link>
           </NavRight>
         </Navbar>
@@ -587,10 +601,10 @@ export default class extends React.Component {
         </Popup>
         <Popover className="popover-menu">
           <List>
-            <ListItem link="#" onClick popoverClose title="Русский">
+            <ListItem link="#" onClick={() => this.changeLang("ru")} popoverClose title="Русский">
               <img src="img/russia.png" width="40px" />
             </ListItem>
-            <ListItem link="#" popoverClose title="English">
+            <ListItem link="#" onClick={() => this.changeLang("en")} popoverClose title="English">
               <img src="img/en.png" width="40px" />
             </ListItem>
           </List>
