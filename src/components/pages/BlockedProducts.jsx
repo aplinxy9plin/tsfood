@@ -15,15 +15,9 @@ export default class extends React.Component {
           swipeout
           onSwipeoutDeleted={this.onDeleted.bind(this)}
           title={number}
-          after="20 ₽"
           subtitle={number.Calories}
-          text="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla sagittis tellus ut turpis condimentum, ut dignissim lacus tincidunt. Cras dolor metus, ultrices condimentum sodales sit amet, pharetra sodales eros. Phasellus vel felis tellus. Mauris rutrum ligula nec dapibus feugiat. In vel dui laoreet, commodo augue id, pulvinar lacus."
           ref={(ref) => this.asd[index] = ref}
         >
-          <SwipeoutActions right>
-            <SwipeoutButton color="red" onClick={this.onDeleted.bind(this, number, index)}>{en.change}</SwipeoutButton>
-          </SwipeoutActions>
-          <img slot='media' src='https://pbs.twimg.com/profile_images/425274582581264384/X3QXBN8C.jpeg' width='80' />
         </ListItem>
       )
       if(items.length == 0){
@@ -48,7 +42,7 @@ export default class extends React.Component {
     //       var arr = [products[i].food_name]
     //       localStorage.setItem('blocked_products', arr)
     //     }
-    //     fetch('http://chpok.ml:3000/change_product?kalorii='+cals+'&name='+name, {mode: 'cors'})
+    //     fetch('http://localhost:3000/change_product?kalorii='+cals+'&name='+name, {mode: 'cors'})
     //     .then(response => response.text())
     //     .then((body) => {
     //       products.splice(index, 1, JSON.parse(body))

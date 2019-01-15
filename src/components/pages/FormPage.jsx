@@ -79,7 +79,7 @@ export default class extends React.Component {
     if(localStorage.getItem('status')){
       if(localStorage.getItem('id') && localStorage.getItem('status') == 'generate_product'){
         // test data!!!
-        fetch('http://chpok.ml:3000/test_data?id='+localStorage.getItem('id'), {mode: 'cors'})
+        fetch('http://localhost:3000/test_data?id='+localStorage.getItem('id'), {mode: 'cors'})
         .then(response => response.text())
         .then((body) => {
           console.log(body);
@@ -91,9 +91,6 @@ export default class extends React.Component {
       var tmp;
       if(localStorage.getItem('id') && localStorage.getItem('status') == 'work'){
         var products = JSON.parse(localStorage.getItem('products'))
-        // items_dairy = products.map((number, index) =>
-        //
-        // )
         var arr = [],
             sum = 0,
             obj = products,
@@ -201,7 +198,7 @@ export default class extends React.Component {
             onSwipeoutDeleted={this.onDeleted.bind(this)}
             link={'/product-info/'+number._id}
             title={number.name}
-            // after={number.category}
+            after="20$"
             subtitle={(number.category+" - "+number.calories+en.kcal)}
             text={number.recipe}
             ref={(ref) => this.asd[index] = ref}
@@ -209,7 +206,7 @@ export default class extends React.Component {
             query={{my_test:"qwerty"}}
           >
             <SwipeoutActions right>
-              <SwipeoutButton color="red" onClick={this.onDeleted.bind(this, number, index)}>{en.change}</SwipeoutButton>
+              <SwipeoutButton color="red" onClick={() => this.onDeleted(number.name)}>{en.change}</SwipeoutButton>
             </SwipeoutActions>
             <img slot='media' src='https://pbs.twimg.com/profile_images/425274582581264384/X3QXBN8C.jpeg' width='80' />
           </ListItem>
@@ -232,7 +229,7 @@ export default class extends React.Component {
   //       belki = this.belki.current.state.currentInputValue,
   //       kalorii = this.kalorii.current.state.currentInputValue;
   //   // console.log(jir);
-  //   fetch('http://chpok.ml:3000/insert?jir='+jir+'&uglevod='+uglevod+'&belki='+belki+'&kalorii='+kalorii, {mode: 'cors'})
+  //   fetch('http://localhost:3000/insert?jir='+jir+'&uglevod='+uglevod+'&belki='+belki+'&kalorii='+kalorii, {mode: 'cors'})
   //   .then(response => response.text())
   //   .then((body) => {
   //     console.log(body);
@@ -265,7 +262,7 @@ export default class extends React.Component {
         money = this.money.current.state.currentInputValue,
         type = (this.state.type == 2 || this.state.type == undefined) ? 1 : 2;
     if((jir !== '' && jir !== undefined) && uglevod !== '' && uglevod !== undefined && belki !== '' && belki !== undefined && kalorii !== '' && kalorii !== undefined && money !== '' && money !== undefined){
-      fetch('http://chpok.ml:3000/insert?type='+type+'&jir='+jir+'&uglevod='+uglevod+'&belki='+belki+'&kalorii='+kalorii, {mode: 'cors'})
+      fetch('http://localhost:3000/insert?type='+type+'&jir='+jir+'&uglevod='+uglevod+'&belki='+belki+'&kalorii='+kalorii, {mode: 'cors'})
       .then(response => response.text())
       .then((body) => {
         console.log(body);
@@ -295,47 +292,78 @@ export default class extends React.Component {
         uglevod = this.uglevod_change.current.state.currentInputValue,
         belki = this.belki_change.current.state.currentInputValue,
         kalorii = this.kalorii_change.current.state.currentInputValue;
+    console.log(this);
     // console.log(jir);
-    fetch('http://chpok.ml:3000/change_data?jir='+jir+'&uglevod='+uglevod+'&belki='+belki+'&kalorii='+kalorii+'&id='+localStorage.getItem('id')+"&blocked_products="+localStorage.getItem('blocked_products'), {mode: 'cors'})
-    .then(response => response.text())
-    .then((body) => {
-      console.log(body);
-      var result = JSON.parse(body)
-      console.log(result);
-      localStorage.setItem('status', 'generate_product');
-      window.location.reload();
-    });
+    // fetch('http://localhost:3000/change_data?jir='+jir+'&uglevod='+uglevod+'&belki='+belki+'&kalorii='+kalorii+'&id='+localStorage.getItem('id')+"&blocked_products="+localStorage.getItem('blocked_products'), {mode: 'cors'})
+    // .then(response => response.text())
+    // .then((body) => {
+    //   console.log(body);
+    //   var result = JSON.parse(body)
+    //   console.log(result);
+    //   localStorage.setItem('status', 'generate_product');
+    //   window.location.reload();
+    // });
   }
   // .then(response => {
   //   console.log(response);
   //   localStorage.setItem('id', JSON.stringify(response));
   //   localStorage.setItem('status', 'generate_product');
   // })
-  onDeleted = (nubmer, index, e) => {
-    var products = JSON.parse(localStorage.getItem('products'))
-    for (var i = 0; i < products.length; i++) {
-      if(products[i].food_name == this.asd[index].props.title){
-        var cals = products[i].Calories,
-            name = products[i].food_name;
-        var blocked_products = localStorage.getItem('blocked_products')
-        if(blocked_products){
-          var arr = blocked_products.split(',')
-          arr.push(products[i].food_name)
-          localStorage.setItem('blocked_products', arr)
-        }else{
-          var arr = [products[i].food_name]
-          localStorage.setItem('blocked_products', arr)
-        }
-        fetch('http://chpok.ml:3000/change_product?kalorii='+cals+'&name='+name+"&id="+localStorage.getItem('id')+"&blocked_products="+localStorage.getItem('blocked_products'), {mode: 'cors'})
-        .then(response => response.text())
-        .then((body) => {
-          products.splice(index, 1, JSON.parse(body))
+
+  onDeleted(name){
+    var blocked = localStorage.getItem('blocked_products') ? JSON.stringify(localStorage.getItem('blocked_products')) : ""
+    fetch('http://localhost:3000/change_dish?name='+name+"&blocked="+blocked, {mode: 'cors'})
+    .then(response => response.text())
+    .then((body) => {
+      body = JSON.parse(body)
+      var products = JSON.parse(localStorage.getItem('products'))
+      for (var i = 0; i < products.length; i++) {
+        if(products[i].name == name){
+          var blocked_products = localStorage.getItem('blocked_products')
+          if(blocked_products){
+            var arr = blocked_products.split(',')
+            arr.push(body.name)
+            console.log(arr);
+            localStorage.setItem('blocked_products', arr)
+          }else{
+            var arr = [body.name]
+            console.log(arr);
+            localStorage.setItem('blocked_products', arr)
+          }
+          products.splice(i, 1, body)
           localStorage.setItem('products', JSON.stringify(products))
-          window.location.reload();
-        });
+          window.location.reload()
+        }
       }
-    }
+    });
   }
+
+  // onDeleted = (nubmer, index, e) => {
+  //   console.log(this);
+  //   // var products = JSON.parse(localStorage.getItem('products'))
+  //   // for (var i = 0; i < products.length; i++) {
+  //   //   if(products[i].food_name == this.asd[index].props.title){
+  //   //     var cals = products[i].Calories,
+  //   //         name = products[i].food_name;
+  //   //     var blocked_products = localStorage.getItem('blocked_products')
+  //   //     if(blocked_products){
+  //   //       var arr = blocked_products.split(',')
+  //   //       arr.push(products[i].food_name)
+  //   //       localStorage.setItem('blocked_products', arr)
+  //   //     }else{
+  //   //       var arr = [products[i].food_name]
+  //   //       localStorage.setItem('blocked_products', arr)
+  //   //     }
+  //   //     fetch('http://localhost:3000/change_product?kalorii='+cals+'&name='+name+"&id="+localStorage.getItem('id')+"&blocked_products="+localStorage.getItem('blocked_products'), {mode: 'cors'})
+  //   //     .then(response => response.text())
+  //   //     .then((body) => {
+  //   //       products.splice(index, 1, JSON.parse(body))
+  //   //       localStorage.setItem('products', JSON.stringify(products))
+  //   //       window.location.reload();
+  //   //     });
+  //   //   }
+  //   // }
+  // }
 
   render() {
    return (
