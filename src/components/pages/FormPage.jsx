@@ -25,8 +25,11 @@ import {
   Card,
   CardFooter,
   CardContent,
-  CardHeader
+  CardHeader,
+  NavRight,
+  Popover
 } from 'framework7-react';
+import {dialog} from 'framework7'
 var en = require('./en.json');
 const numbers = [1, 2, 3, 4, 5];
 const listItems = numbers.map((number) =>
@@ -51,6 +54,8 @@ export default class extends React.Component {
     this.uglevod_change = React.createRef();
     this.belki_change = React.createRef();
     this.kalorii_change = React.createRef();
+    this.money_change = React.createRef();
+    this.money = React.createRef();
     this.enterData = this.enterData.bind(this);
     this.changeData = this.changeData.bind(this);
     this.changeRadio = this.changeRadio.bind(this);
@@ -246,17 +251,33 @@ export default class extends React.Component {
         uglevod = this.uglevod.current.state.currentInputValue,
         belki = this.belki.current.state.currentInputValue,
         kalorii = this.kalorii.current.state.currentInputValue,
+        money = this.money.current.state.currentInputValue,
         type = (this.state.type == 2 || this.state.type == undefined) ? 1 : 2;
-    fetch('http://localhost:1337/insert?type='+type+'&jir='+jir+'&uglevod='+uglevod+'&belki='+belki+'&kalorii='+kalorii, {mode: 'cors'})
-    .then(response => response.text())
-    .then((body) => {
-      console.log(body);
-      var json = JSON.parse(body)
-      localStorage.setItem('id', json._id)
-      localStorage.setItem('calories', json.kalorii)
-      localStorage.setItem('status', 'generate_product');
-      window.location.reload();
-    });
+    if((jir !== '' && jir !== undefined) && uglevod !== '' && uglevod !== undefined && belki !== '' && belki !== undefined && kalorii !== '' && kalorii !== undefined && money !== '' && money !== undefined){
+      fetch('http://localhost:1337/insert?type='+type+'&jir='+jir+'&uglevod='+uglevod+'&belki='+belki+'&kalorii='+kalorii, {mode: 'cors'})
+      .then(response => response.text())
+      .then((body) => {
+        console.log(body);
+        var json = JSON.parse(body)
+        localStorage.setItem('id', json._id)
+        localStorage.setItem('calories', json.kalorii)
+        localStorage.setItem('status', 'generate_product');
+        window.location.reload();
+      });
+    }else{
+      const self = this;
+      const $ = self.$$;
+      self.$f7.dialog.create(
+        {
+          title: en.error,
+          text: en.empty_fields,
+          buttons: [{
+            text: en.close
+            }
+          ]
+        }
+      ).open();
+    }
   }
   changeData(){
     var jir = this.jir_change.current.state.currentInputValue,
@@ -478,11 +499,11 @@ export default class extends React.Component {
                 </ListItem>
                 <ListItem>
                   <Label>{en.calories}</Label>
-                  <Input ref={this.kalorii_change} type="number" placeholder={en.calories} />
+                  <Input ref={this.money_change} type="number" placeholder={en.calories} />
                 </ListItem>
                 <ListItem>
                   <Label>{en.money}</Label>
-                  <Input type="number" placeholder={en.money_send} />
+                  <Input ref={this.money_change} type="number" placeholder={en.money_send} />
                 </ListItem>
               </List>
             </Block>
@@ -507,7 +528,13 @@ export default class extends React.Component {
 
         <Popup className="demo-popup" opened={this.state.popupOpened} onPopupClosed={() => this.setState({popupOpened : false})}>
         <Page>
-        <Navbar title={en.enter_data} />
+        <Navbar title={en.enter_data}>
+          <NavRight>
+            <Link icon="icon-bars" popoverOpen=".popover-menu">
+              <img src="img/en.png" width="40px" />
+            </Link>
+          </NavRight>
+        </Navbar>
         <BlockTitle>{en.data}</BlockTitle>
         <List form formdata>
           <ListItem>
@@ -528,7 +555,7 @@ export default class extends React.Component {
           </ListItem>
           <ListItem>
             <Label>{en.money}</Label>
-            <Input type="number" placeholder={en.money_send} />
+            <Input ref={this.money} type="number" placeholder={en.money_send} />
           </ListItem>
         </List>
         <BlockTitle>
@@ -558,7 +585,16 @@ export default class extends React.Component {
         </Block>
         </Page>
         </Popup>
-
+        <Popover className="popover-menu">
+          <List>
+            <ListItem link="#" onClick popoverClose title="Русский">
+              <img src="img/russia.png" width="40px" />
+            </ListItem>
+            <ListItem link="#" popoverClose title="English">
+              <img src="img/en.png" width="40px" />
+            </ListItem>
+          </List>
+        </Popover>
       </Page>
     )
   }
