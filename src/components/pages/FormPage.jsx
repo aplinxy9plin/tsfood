@@ -262,16 +262,28 @@ export default class extends React.Component {
         money = this.money.current.state.currentInputValue,
         type = (this.state.type == 2 || this.state.type == undefined) ? 1 : 2;
     if((jir !== '' && jir !== undefined) && uglevod !== '' && uglevod !== undefined && belki !== '' && belki !== undefined && kalorii !== '' && kalorii !== undefined && money !== '' && money !== undefined){
-      fetch('http://chpok.ml:3000/insert?type='+type+'&jir='+jir+'&uglevod='+uglevod+'&belki='+belki+'&kalorii='+kalorii, {mode: 'cors'})
-      .then(response => response.text())
-      .then((body) => {
-        console.log(body);
-        var json = JSON.parse(body)
-        localStorage.setItem('id', json._id)
-        localStorage.setItem('calories', json.kalorii)
-        localStorage.setItem('status', 'generate_product');
-        window.location.reload();
-      });
+      if(kalorii <= 1000 || kalorii >= 5000){
+        const self = this;
+        const $ = self.$$;
+        self.$f7.dialog.create({
+          title: en.error,
+          text: en.bad_field,
+          buttons: [{
+            test: en.close
+          }]
+        })
+      }else{
+        fetch('http://chpok.ml:3000/insert?type='+type+'&jir='+jir+'&uglevod='+uglevod+'&belki='+belki+'&kalorii='+kalorii, {mode: 'cors'})
+        .then(response => response.text())
+        .then((body) => {
+          console.log(body);
+          var json = JSON.parse(body)
+          localStorage.setItem('id', json._id)
+          localStorage.setItem('calories', json.kalorii)
+          localStorage.setItem('status', 'generate_product');
+          window.location.reload();
+        });
+      }
     }else{
       const self = this;
       const $ = self.$$;
