@@ -4,6 +4,7 @@
   "private": true,
   "dependencies": {
     "body-parser": "^1.18.3",
+    "cross-env": "^5.2.0",
     "express": "^4.16.4",
     "framework7": "^3.0.1",
     "framework7-icons": "^0.9.1",
